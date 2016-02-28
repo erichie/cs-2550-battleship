@@ -14,7 +14,28 @@
           <td class="miss"><b>Miss</b></td>
         </tr>
       </table>
-      <h1>Player Board</h1>
+
+      <div class="header">
+        <h1>Player Board</h1>
+        <h2 id="message">Cell:</h2>
+      </div>
+
+      <div class="ship-placement">
+        <label for="row">Ship</label>
+          <select id="ship">
+            <option value="carrier">Carrier (5)</option>
+            <option value="battleship">Battleship (4)</option>
+            <option value="cruiser">Cruiser (3)</option>
+            <option value="sub">Submarine (3)</option>
+            <option value="destroyer">Destroyer (2)</option>
+          </select>
+        <label for="row">Row</label>
+          <input id="row" type="text" size="1">
+        <label for="col">Col</label>
+          <input id="col" type="text" size="1">
+        <button id="place-button" type="button">Place Ship</button>
+      </div>
+
       <div class="grid">
         <table class="game-grid" id="gameGrid">
         </table>

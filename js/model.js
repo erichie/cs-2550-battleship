@@ -73,8 +73,16 @@ function createGridArray(x, y) {
 }
 
 // Implement these functions later on to update the Model
-function placeShip(ship, location) {
-
+function placeShip() {
+  var ship = document.getElementById('ship');
+  var row = document.getElementById('row');
+  var col = document.getElementById('col');
+  var placeButton = document.getElementById('place-button');
+  placeButton.onclick = function() {
+    console.log(row.value);
+    console.log(col.value);
+    console.log(ship.value)
+  }
 }
 
 function markHit() {

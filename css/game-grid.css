@@ -4,6 +4,13 @@ body {
   background-color: #d9cfba;
   color: #54504a;
 }
+.header {
+  margin-left: 30px;
+}
+
+.ship-placement {
+  margin-left: 30px;
+}
 
 .game-grid table, th, td {
   border-style: solid;

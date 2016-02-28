@@ -6,7 +6,8 @@ function init() {
   game.grid = initializeGrid(game.grid);
   game.grid = addShipsToGrid(game.playerShips, game.grid);
   gameGrid.innerHTML = displayGrid(game.grid);
-  handleCellClick(game.grid);
+  handleCellClick();
+  placeShip();
 }
 
 function initializeGrid(grid) {
@@ -51,15 +52,24 @@ function displayGrid(grid) {
   return html;
 }
 
-function handleCellClick(grid) {
+function handleCellClick() {
+  var gameGrid = document.getElementById('gameGrid');
   var cells = document.getElementsByTagName('td');
   for (var i = 0; i < cells.length; i++) {
     cells[i].onclick = function() {
-      // Subtract 1 from col and row variables to account for the table headings
-      var col = this.cellIndex - 1;
-      var row = this.parentNode.rowIndex - 1;
-      console.log(grid[col][row]);
-      // Change cell here
+      var message = document.getElementById('message');
+      var col = this.cellIndex;
+      var row = this.parentNode.rowIndex;
+      var cell = gameGrid.rows[row].cells[col];
+      if (cell.className === 'ship') {
+        cell.className = 'hit';
+      }
+      else {
+        if (cell.className !== 'hit') {
+          cell.className = 'miss';
+        }
+      }
+      message.innerHTML = 'Cell: ' + String.fromCharCode(65 + (col - 1))  + ' ' + row + ' was clicked';
     }
   }
 }
