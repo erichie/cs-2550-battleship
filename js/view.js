@@ -6,6 +6,7 @@ function init() {
   game.grid = initializeGrid(game.grid);
   game.grid = addShipsToGrid(game.playerShips, game.grid);
   gameGrid.innerHTML = displayGrid(game.grid);
+  handleCellClick(game.grid);
 }
 
 function initializeGrid(grid) {
@@ -31,15 +32,15 @@ function addShipsToGrid(ships, grid) {
 
 function displayGrid(grid) {
   var html = '';
-  for (var i = 0; i < grid.length; i++) {
-    if (i == 0) {
+  for (var i = -1; i < grid.length; i++) {
+    if (i == -1) {
       html += '<tr><th></th>';
     }
     else {
-      html += '</tr><tr><th>' + i + '</th>';
+      html += '</tr><tr><th>' + (i + 1) + '</th>';
     }
     for (var j = 0; j < grid.length; j++) {
-      if (i == 0) {
+      if (i == -1) {
         html += '<th>' + String.fromCharCode(65 + j); + '</th></tr>';
       }
       else {
@@ -48,4 +49,17 @@ function displayGrid(grid) {
     }
   }
   return html;
+}
+
+function handleCellClick(grid) {
+  var cells = document.getElementsByTagName('td');
+  for (var i = 0; i < cells.length; i++) {
+    cells[i].onclick = function() {
+      // Subtract 1 from col and row variables to account for the table headings
+      var col = this.cellIndex - 1;
+      var row = this.parentNode.rowIndex - 1;
+      console.log(grid[col][row]);
+      // Change cell here
+    }
+  }
 }
