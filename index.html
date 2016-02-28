@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Assignment 3 (CS 2550) - Edward Richards</title>
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+  </head>
+  <body>
+    <div class="body-container">
+      <div class="heading">
+        <h1>Assignment 3</h1>
+        <h2>Edward Richards</h2>
+        <h2><a href="grid.html" target="_blank">Game Board</a></h2>
+      </div>
+      <hr>
+      <div class="content">
+        <h1>Battleship</h1>
+        <h2>Game Description</h2>
+        <ul>
+          <li><b>Players:</b> 2</li>
+          <li><b>Objective:</b> Players take turns "attacking" the other players ships by calling out a tile on the grid. The tile is marked either
+            a hit or miss. Each ship has a different number of times it can be hit.</li>
+          <li><b>How to Win:</b> One player wins when all the other players ships are sunk.</li>
+        </ul>
+        <hr>
+        <h2>How to Play Battleship</h2>
+        <a href="http://www.hasbro.com/common/instruct/Battleship.PDF" target="_blank">Explanation of the game's rules</a>
+        <h2>Diagram of the Game Board</h2>
+        <p><img src="img/battleship.png" /></p>
+        <p><i>Image Credit to <a href="http://www.battleshiponline.org/how-to-play-battleship.php" target="_blank">battleshiponline.org</a></i></p>
+        <hr>
+        <h2>Updated Software Design</h2>
+        <h3>Model</h3>
+
+        <h4>Objects</h4>
+        <p>Game: Holds all the other objects in the game.</p>
+        <p>PlayerShips: Holds the placement of each of the Player's ship Arrays. </p>
+        <p>ComputerShips: Holds the placement of each of the Computer's ship Arrays. </p>
+        <p>PlayerGuesses: Holds the guesses that the player has made and marks them hit or miss. </p>
+        <p>ComputerGuesses: Holds the guesses that the computer has made and marks them hit or miss. </p>
+
+        <h4>Arrays</h4>
+        <p>playerCarrier: An array containing the 5 coordinates of the Player's Carrier.</p>
+        <p>playerBattleship: An array containing the 4 coordinates of the Player's Battleship.</p>
+        <p>playerCruiser: An array containing the 3 coordinates of the Player's Cruiser.</p>
+        <p>playerSubmarine: An array containing the 3 coordinates of the Player's Submarine.</p>
+        <p>playerDestroyer: An array containing the 2 coordinates of the Player's Destroyer.</p>
+        <p>computerCarrier: An array containing the 5 coordinates of the Computers's Carrier.</p>
+        <p>computerBattleship: An array containing the 4 coordinates of the Computers's Battleship.</p>
+        <p>computerCruiser: An array containing the 3 coordinates of the Computers's Cruiser.</p>
+        <p>computerSubmarine: An array containing the 3 coordinates of the Computers's Submarine.</p>
+        <p>computerDestroyer: An array containing the 2 coordinates of the Computers's Destroyer.</p>
+        <p>(For ship Arrays each coordinate will be stored as an Object with an x and y value. Example [{"x": 1, "y": "C"}, {"x": 2, "y": C}])</p>
+
+        <h4>Functions</h4>
+        <p>generateAndPlaceShips: initializes the Game object and all the ships</p>
+        <p>createGridArray: generates the 2D array used for the grid</p>
+        <p><i>The following functions have not yet been implemented because they pertain to updating the model</i></p>
+        <p>placeShip(ship, position): will place a ship on the game board</p>
+        <p>markHit(x, y): marks a coordinate as a hit</p>
+        <p>markMiss(x, y): marks a coordinate as a miss</p>
+        <p>markSunk(ship): marks a ship as sunk</p>
+        <p>computerAttack(): randomly chooses a coordinate to attack</p>
+        <p>playerAttack(): gets the coordinate the player chooses to attack</p>
+
+        <h3>View</h3>
+
+        <h4>Functions</h4>
+        <p>init: calls the necessary functions to initialize the Game object and view</p>
+        <p>initializeGrid: puts the necessary HTML in the 2D Grid Array</p>
+        <p>addShipsToGrid: adds the ships from the playerShips Object to the Grid</p>
+        <p>displayGrid: puts all the HTML together to display the player grid</p>
+      </div>
+    </div>
+  </body>
+</html>

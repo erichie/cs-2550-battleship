@@ -1,0 +1,42 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #d9cfba;
+  color: #54504a;
+}
+
+.game-grid table, th, td {
+  border-style: solid;
+  border-width: 2px;
+}
+
+.game-grid table {
+  display: inline;
+  height: 500px;
+  width: 500px;
+}
+
+.game-grid th, td {
+  height: 50px;
+  width: 50px;
+}
+
+.hit {
+  background-color: #D20000;
+  border-color: #D20000;
+}
+
+.miss {
+  background-color: #0092D2;
+  border-color: #0092D2;
+}
+
+.ship {
+  background-color: #00D20A;
+  border-color: #00D20A;
+}
+
+.grid {
+  margin: 30px 30px 30px 30px;
+  display: inline-table;
+}
