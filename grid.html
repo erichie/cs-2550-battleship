@@ -16,23 +16,36 @@
       </table>
 
       <div class="header">
+        <h2><a href="checkpoint.html" target="_blank">Checkpoint</a></h2>
         <h1>Player Board</h1>
+        <h1 id="player-name">Name: </h1>
         <h2 id="message">Cell:</h2>
       </div>
 
+      <div id="debug" class="debug"></div>
+
       <div class="ship-placement">
-        <label for="row">Ship</label>
+        <label for="name-input">Your Name</label>
+          <input id="name-input" type="text">
+        <h3>Ship Placement</h3>
+        <label for="ship">Ship</label>
           <select id="ship">
-            <option value="carrier">Carrier (5)</option>
-            <option value="battleship">Battleship (4)</option>
-            <option value="cruiser">Cruiser (3)</option>
-            <option value="sub">Submarine (3)</option>
-            <option value="destroyer">Destroyer (2)</option>
+            <option value="playerCarrier">Carrier (5)</option>
+            <option value="playerBattleship">Battleship (4)</option>
+            <option value="playerCruiser">Cruiser (3)</option>
+            <option value="playerSub">Submarine (3)</option>
+            <option value="playerDestroyer">Destroyer (2)</option>
           </select>
-        <label for="row">Row</label>
-          <input id="row" type="text" size="1">
+        <label for="direction">Direction</label>
+          <select id="direction">
+            <option value="horizontal">Horizontal</option>
+            <option value="vertical">Vertical</option>
+          </select>
+        <h4>Starting Coordinate</h4>
         <label for="col">Col</label>
-          <input id="col" type="text" size="1">
+          <input id="col" type="number" min="1" max="10">
+        <label for="row">Row</label>
+          <input id="row" type="number" min="1" max="10">
         <button id="place-button" type="button">Place Ship</button>
       </div>
 

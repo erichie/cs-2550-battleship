@@ -44,11 +44,11 @@ function generateAndPlaceShips() {
   var computerGuesses = new Array();
 
   // Generates Player ships
-  playerShips.playerCarrier = new Ship(5, [{'x':0, 'y':1}, {'x':0, 'y':2}, {'x':0, 'y':3}, {'x':0, 'y':4}, {'x':0, 'y':5}]);
-  playerShips.playerBattleship = new Ship(4, [{'x':3, 'y':2}, {'x':4, 'y':2}, {'x':5, 'y':2}, {'x':6, 'y':2}]);
-  playerShips.playerCruiser = new Ship(3, [{'x':9, 'y':7}, {'x':9, 'y':8}, {'x':9, 'y':9}]);
-  playerShips.playerSub = new Ship(3, [{'x':4, 'y':4}, {'x':4, 'y':5}, {'x':4, 'y':6}]);
-  playerShips.playerDestroyer = new Ship(2, [{'x':5, 'y':8}, {'x':6, 'y':8}]);
+  playerShips.playerCarrier = new Ship(5, []);
+  playerShips.playerBattleship = new Ship(4, []);
+  playerShips.playerCruiser = new Ship(3, []);
+  playerShips.playerSub = new Ship(3, []);
+  playerShips.playerDestroyer = new Ship(2, []);
 
   // Generates Computer ships
   computerShips.computerCarrier = new Ship(5, [{'x':1, 'y':1}, {'x':1, 'y':2}, {'x':1, 'y':3}, {'x':1, 'y':4}, {'x':1, 'y':5}]);
@@ -73,16 +73,30 @@ function createGridArray(x, y) {
 }
 
 // Implement these functions later on to update the Model
-function placeShip() {
-  var ship = document.getElementById('ship');
-  var row = document.getElementById('row');
-  var col = document.getElementById('col');
-  var placeButton = document.getElementById('place-button');
-  placeButton.onclick = function() {
-    console.log(row.value);
-    console.log(col.value);
-    console.log(ship.value)
+function placeShip(playerShips) {
+  var debug = document.getElementById('debug');
+  var ship = document.getElementById('ship').value;
+  var row = parseInt(document.getElementById('row').value) - 1;
+  var col = parseInt(document.getElementById('col').value) - 1;
+  var direction = document.getElementById('direction').value;
+  debug.innerHTML = '<p><b>Ship: </b>' + ship + '</p><p><b> Column: </b>' + (col + 1) + '</p><p><b> Row: </b>' + (row + 1) + '</p><p><b> Direction: </b>' + direction;
+  var location = [];
+  if (playerShips[ship].shipLocation.length > 0) {
+    debug.innerHTML += '<p class="error">That ship has already been placed</p>'
+    return false;
   }
+  if (direction == 'horizontal') {
+    for (var i = 0; i < playerShips[ship].shipSize; i++) {
+      location.push({'x':col + i, 'y':row});
+    }
+  }
+  else if (direction == 'vertical') {
+    for (var i = 0; i < playerShips[ship].shipSize; i++) {
+      location.push({'x':col, 'y':row + i});
+    }
+  }
+  playerShips[ship].shipLocation = location;
+  return playerShips;
 }
 
 function markHit() {

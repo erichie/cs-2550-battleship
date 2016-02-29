@@ -1,13 +1,14 @@
 window.onload = init();
 
 function init() {
+  displayName();
   var game = newGame();
   var gameGrid = document.getElementById('gameGrid');
   game.grid = initializeGrid(game.grid);
   game.grid = addShipsToGrid(game.playerShips, game.grid);
   gameGrid.innerHTML = displayGrid(game.grid);
+  game.grid = handleShipPlacement(game.grid, game.playerShips);
   handleCellClick();
-  placeShip();
 }
 
 function initializeGrid(grid) {
@@ -58,18 +59,43 @@ function handleCellClick() {
   for (var i = 0; i < cells.length; i++) {
     cells[i].onclick = function() {
       var message = document.getElementById('message');
+      var cellAction = '';
       var col = this.cellIndex;
       var row = this.parentNode.rowIndex;
       var cell = gameGrid.rows[row].cells[col];
       if (cell.className === 'ship') {
         cell.className = 'hit';
+        cellAction = 'hit!';
       }
       else {
         if (cell.className !== 'hit') {
           cell.className = 'miss';
+          cellAction = 'miss.';
         }
       }
-      message.innerHTML = 'Cell: ' + String.fromCharCode(65 + (col - 1))  + ' ' + row + ' was clicked';
+      message.innerHTML = 'Cell: ' + String.fromCharCode(65 + (col - 1))  + ' ' + row + ' was a ' + cellAction;
     }
+  }
+}
+
+function handleShipPlacement(grid, playerShips)
+{
+  var placeButton = document.getElementById('place-button');
+  placeButton.onclick = function() {
+    var updatedShips = placeShip(playerShips);
+    grid = addShipsToGrid(updatedShips, grid);
+    var gameGrid = document.getElementById('gameGrid');
+    gameGrid.innerHTML = displayGrid(grid);
+    handleCellClick();
+    return grid;
+  }
+}
+
+function displayName()
+{
+  var playerName = document.getElementById('player-name');
+  var nameInput = document.getElementById('name-input');
+  nameInput.oninput = function() {
+    playerName.innerHTML = 'Name: ' + this.value;
   }
 }

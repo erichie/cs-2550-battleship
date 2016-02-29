@@ -8,6 +8,18 @@ body {
   margin-left: 30px;
 }
 
+.debug {
+  width: 300px;
+  height: 300px;
+  position: fixed;
+  left: 40%;
+  top: 40px;
+}
+
+.error {
+  color: red;
+}
+
 .ship-placement {
   margin-left: 30px;
 }
