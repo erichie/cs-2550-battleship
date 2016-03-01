@@ -1,5 +1,5 @@
 function newGame() {
-  var game = generateAndPlaceShips();
+  var game = initializeGame();
   return game;
 }
 
@@ -36,7 +36,7 @@ function Ship(size, location) {
 }
 
 // Functions
-function generateAndPlaceShips() {
+function initializeGame() {
   var grid = createGridArray(10, 10);
   var playerShips = new PlayerShips();
   var computerShips = new ComputerShips();
@@ -108,13 +108,5 @@ function markMiss() {
 }
 
 function markSunk() {
-
-}
-
-function playerAttack() {
-
-}
-
-function computerAttack() {
 
 }

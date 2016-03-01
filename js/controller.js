@@ -1,0 +1,7 @@
+function playerAttack() {
+
+}
+
+function computerAttack() {
+
+}

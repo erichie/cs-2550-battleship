@@ -1,6 +1,7 @@
 window.onload = init();
 
 function init() {
+  moveLegend();
   displayName();
   var game = newGame();
   var gameGrid = document.getElementById('gameGrid');
@@ -65,11 +66,13 @@ function handleCellClick() {
       var cell = gameGrid.rows[row].cells[col];
       if (cell.className === 'ship') {
         cell.className = 'hit';
+        cell.innerHTML = 'HIT';
         cellAction = 'hit!';
       }
       else {
         if (cell.className !== 'hit') {
           cell.className = 'miss';
+          cell.innerHTML = 'MISS';
           cellAction = 'miss.';
         }
       }
@@ -97,5 +100,18 @@ function displayName()
   var nameInput = document.getElementById('name-input');
   nameInput.oninput = function() {
     playerName.innerHTML = 'Name: ' + this.value;
+  }
+}
+
+function moveLegend()
+{
+  var legend = document.getElementById('legendTable');
+  var id = setInterval(move, 10)
+  var position = 500;
+  function move() {
+    if (position !== 0) {
+      position--;
+      legend.style.top = position + 'px';
+    }
   }
 }

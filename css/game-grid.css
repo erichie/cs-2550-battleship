@@ -8,6 +8,15 @@ body {
   margin-left: 30px;
 }
 
+#legendTable {
+  position: absolute;
+  left: 200px;
+}
+
+.body-container {
+  position: relative;
+}
+
 .debug {
   width: 300px;
   height: 300px;
