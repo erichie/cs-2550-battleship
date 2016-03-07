@@ -1,15 +1,19 @@
 <!doctype html>
 <html>
   <head>
-    <title>Assignment 4 (CS 2550) - Edward Richards</title>
+    <title>Assignment 5 (CS 2550) - Edward Richards</title>
     <link rel="stylesheet" type="text/css" href="css/main.css">
   </head>
   <body>
     <div class="body-container">
       <div class="heading">
-        <h1>Assignment 4</h1>
+        <h1>Assignment 5</h1>
         <h2>Edward Richards</h2>
-        <h2><a href="grid.html" target="_blank">Game Board</a></h2>
+        <label>Username <input id="username" type="text"></label>
+        <label>Password <input id="password" type="password"></label>
+        <input id="login-button" type="submit" value="Login" onclick="handleLogin()">
+        <div id="message"></div>
+        <!-- <h2><a href="grid.html" target="_blank">Game Board</a></h2> -->
         <h2><a href="checkpoint.html" target="_blank">Checkpoint</a></h2>
       </div>
       <hr>
@@ -76,5 +80,7 @@
         <p>playerAttack(): gets the coordinate the player chooses to attack</p>
       </div>
     </div>
+
+    <script src="js/controller.js"></script>
   </body>
 </html>

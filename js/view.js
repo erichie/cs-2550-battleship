@@ -1,7 +1,7 @@
 window.onload = init();
 
 function init() {
-  moveLegend();
+  // moveLegend();
   displayName();
   var game = newGame();
   var gameGrid = document.getElementById('gameGrid');
@@ -10,6 +10,8 @@ function init() {
   gameGrid.innerHTML = displayGrid(game.grid);
   game.grid = handleShipPlacement(game.grid, game.playerShips);
   handleCellClick();
+  document.getElementById('user-info').innerHTML = retrieveUserInfo();
+
 }
 
 function initializeGrid(grid) {
