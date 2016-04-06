@@ -1,3 +1,5 @@
+window.onload = outputSampleJSONMessage();
+
 function handleLogin()
 {
   var loginButton = document.getElementById('login-button');
@@ -14,7 +16,7 @@ function handleLogin()
         window.location = 'grid.html';
       }
       else {
-        document.getElementById('message').innerHTML = '<h3>Invalid Login Credentials</h3>';
+        document.getElementById('home-message').innerHTML = '<h3>Invalid Login Credentials</h3>';
       }
     }
   }
@@ -41,4 +43,22 @@ function playerAttack() {
 
 function computerAttack() {
 
+}
+
+function loadSampleJSON(filename)
+{
+  var httpRequest = new XMLHttpRequest();
+  httpRequest.open('GET', filename, false);
+  httpRequest.send();
+  var response = JSON.parse(httpRequest.responseText);
+  return response;
+}
+
+function outputSampleJSONMessage()
+{
+  var json = loadSampleJSON('sample.json');
+  var gameInfo = document.getElementById('game-info');
+  if (gameInfo) {
+    gameInfo.innerHTML = '<h3>This version of ' + json.game_info.name + ' is for ' + json.game_info.players + ' players and was created by ' + json.game_info.created_by;
+  }
 }

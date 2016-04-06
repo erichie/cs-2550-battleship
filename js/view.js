@@ -5,13 +5,14 @@ function init() {
   displayName();
   var game = newGame();
   var gameGrid = document.getElementById('gameGrid');
+  var json = loadSampleJSON('sample.json');
+  game.playerShips = loadPlayerConfig(json, game.playerShips);
   game.grid = initializeGrid(game.grid);
   game.grid = addShipsToGrid(game.playerShips, game.grid);
   gameGrid.innerHTML = displayGrid(game.grid);
   game.grid = handleShipPlacement(game.grid, game.playerShips);
   handleCellClick();
   document.getElementById('user-info').innerHTML = retrieveUserInfo();
-
 }
 
 function initializeGrid(grid) {
@@ -116,4 +117,15 @@ function moveLegend()
       legend.style.top = position + 'px';
     }
   }
+}
+
+function loadPlayerConfig(json, playerShips)
+{
+  document.getElementById('player-name').innerHTML += json.player_config.name;
+  var i = 0;
+  for (var key in playerShips) {
+    playerShips[key].shipLocation = json.player_config.ships[i];
+    i++;
+  }
+  return playerShips;
 }
