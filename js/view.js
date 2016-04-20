@@ -1,42 +1,53 @@
 window.onload = init();
 
-function init() {
+function init()
+{
+  // Initialize game Model and load computer ships
   // moveLegend();
   displayName();
   var game = newGame();
-  var gameGrid = document.getElementById('gameGrid');
-  var json = loadSampleJSON('sample.json');
-  game.playerShips = loadPlayerConfig(json, game.playerShips);
+  var gameGrid = document.getElementById('playerGrid');
+  var computerGrid = document.getElementById('computerGrid');
+  var json = loadSampleJSON('config.json');
+  game.computerShips = loadComputerConfig(json, game.computerShips);
+
+  // Initialize player grid
   game.grid = initializeGrid(game.grid);
-  game.grid = addShipsToGrid(game.playerShips, game.grid);
+  game.grid = addShipsToGrid(game.playerShips, game.grid, true);
   gameGrid.innerHTML = displayGrid(game.grid);
+
+  // Initialize computer grid
+  game.computerGrid = initializeGrid(game.computerGrid);
+  game.computerGrid = addShipsToGrid(game.computerShips, game.computerGrid, false);
+  computerGrid.innerHTML = displayGrid(game.computerGrid);
+
+  // Handle the placement of the player's ships on the player grid
   game.grid = handleShipPlacement(game.grid, game.playerShips);
+
+  // Make the computer grid clickable so the player can attack
   handleCellClick();
-  document.getElementById('user-info').innerHTML = retrieveUserInfo();
-}
 
-function initializeGrid(grid) {
-  for (var h = 0; h < grid.length; h++) {
-    for (var i = 0; i < grid.length; i++) {
-      for (var j = 0; i < grid.length; i++) {
-        grid[i][h] = '<td></td>';
-      }
-    }
+  // Save and Load game data
+  var loadGameButton = document.getElementById('load-game');
+  loadGameButton.onclick = function() {
+    var saveGame = loadSaveGame();
+    game.grid = addShipsToGrid(saveGame.playerShips, game.grid, true);
+    gameGrid.innerHTML = displayGrid(game.grid);
   }
-  return grid;
-}
-
-function addShipsToGrid(ships, grid) {
-  for (var key in ships) {
-    for (var a in ships[key].shipLocation) {
-      var location = ships[key].shipLocation[a];
-      grid[location.x][location.y] = '<td class="ship"></td>';
-    }
+  var saveGameButton = document.getElementById('save-game');
+  saveGameButton.onclick = function() {
+    saveGame(game);
+    return false;
   }
-  return grid;
+  var clearStorage = document.getElementById('clear-storage');
+  clearStorage.onclick = function() {
+    clearLocalStorage();
+    return false;
+  }
 }
 
-function displayGrid(grid) {
+function displayGrid(grid)
+{
   var html = '';
   for (var i = -1; i < grid.length; i++) {
     if (i == -1) {
@@ -55,46 +66,6 @@ function displayGrid(grid) {
     }
   }
   return html;
-}
-
-function handleCellClick() {
-  var gameGrid = document.getElementById('gameGrid');
-  var cells = document.getElementsByTagName('td');
-  for (var i = 0; i < cells.length; i++) {
-    cells[i].onclick = function() {
-      var message = document.getElementById('message');
-      var cellAction = '';
-      var col = this.cellIndex;
-      var row = this.parentNode.rowIndex;
-      var cell = gameGrid.rows[row].cells[col];
-      if (cell.className === 'ship') {
-        cell.className = 'hit';
-        cell.innerHTML = 'HIT';
-        cellAction = 'hit!';
-      }
-      else {
-        if (cell.className !== 'hit') {
-          cell.className = 'miss';
-          cell.innerHTML = 'MISS';
-          cellAction = 'miss.';
-        }
-      }
-      message.innerHTML = 'Cell: ' + String.fromCharCode(65 + (col - 1))  + ' ' + row + ' was a ' + cellAction;
-    }
-  }
-}
-
-function handleShipPlacement(grid, playerShips)
-{
-  var placeButton = document.getElementById('place-button');
-  placeButton.onclick = function() {
-    var updatedShips = placeShip(playerShips);
-    grid = addShipsToGrid(updatedShips, grid);
-    var gameGrid = document.getElementById('gameGrid');
-    gameGrid.innerHTML = displayGrid(grid);
-    handleCellClick();
-    return grid;
-  }
 }
 
 function displayName()
@@ -117,15 +88,4 @@ function moveLegend()
       legend.style.top = position + 'px';
     }
   }
-}
-
-function loadPlayerConfig(json, playerShips)
-{
-  document.getElementById('player-name').innerHTML += json.player_config.name;
-  var i = 0;
-  for (var key in playerShips) {
-    playerShips[key].shipLocation = json.player_config.ships[i];
-    i++;
-  }
-  return playerShips;
 }
