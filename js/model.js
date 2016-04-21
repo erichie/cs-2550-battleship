@@ -17,6 +17,7 @@ function Game(grid, computerGrid, playerShips, computerShips, playerGuesses, com
 
 function PlayerShips()
 {
+  this.placedCount = 0;
   this.playerCarrier;
   this.playerBattleship;
   this.playerCruiser;
@@ -118,17 +119,20 @@ function placeShip(playerShips)
   }
   debug.innerHTML = '<p><b>Ship: </b>' + ship + '</p><p><b> Column: </b>' + (col + 1) + '</p><p><b> Row: </b>' + (row + 1) + '</p><p><b> Direction: </b>' + direction;
   playerShips[ship].shipLocation = location;
+  playerShips.placedCount++;
   return playerShips;
 }
 
-function markHit()
+function markHit(row, col, grid)
 {
-
+  grid[col][row] = '<td class="hit"><b>HIT</b></td>';
+  return grid;
 }
 
-function markMiss()
+function markMiss(row, col, grid)
 {
-
+  grid[col][row] = '<td class="miss"><b>MISS</b></td>';
+  return grid;
 }
 
 function markSunk()
