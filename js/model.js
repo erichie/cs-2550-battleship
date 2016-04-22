@@ -5,14 +5,14 @@ function newGame()
 }
 
 // Objects
-function Game(grid, computerGrid, playerShips, computerShips, playerGuesses, computerGuesses)
+function Game(grid, computerGrid, playerShips, computerShips)
 {
   this.grid = grid;
   this.computerGrid = computerGrid;
   this.playerShips = playerShips;
   this.computerShips = computerShips;
-  this.playerGuesses = playerGuesses;
-  this.computerGuesses = computerGuesses;
+  this.computerRow = -1;
+  this.computerCol = -1;
 }
 
 function PlayerShips()
@@ -23,6 +23,7 @@ function PlayerShips()
   this.playerCruiser;
   this.playerSub;
   this.playerDestroyer;
+  this.shipSunks = 0;
 }
 
 function ComputerShips()
@@ -32,6 +33,7 @@ function ComputerShips()
   this.computerCruiser;
   this.computerSub;
   this.computerDestroyer;
+  this.shipsSunk = 0;
 }
 
 function Ship(size, location)
@@ -49,8 +51,6 @@ function initializeGame()
   var computerGrid = createGridArray(10, 10);
   var playerShips = new PlayerShips();
   var computerShips = new ComputerShips();
-  var playerGuesses = new Array();
-  var computerGuesses = new Array();
 
   // Generates Player ships
   playerShips.playerCarrier = new Ship(5, []);
@@ -66,7 +66,7 @@ function initializeGame()
   computerShips.computerSub = new Ship(3, []);
   computerShips.computerDestroyer = new Ship(2, []);
 
-  var game = new Game(grid, computerGrid, playerShips, computerShips, playerGuesses, computerGuesses);
+  var game = new Game(grid, computerGrid, playerShips, computerShips);
   return game;
 }
 
@@ -123,19 +123,36 @@ function placeShip(playerShips)
   return playerShips;
 }
 
-function markHit(row, col, grid)
+function markShipHit(ship, ships)
+{
+  if (ships[ship].hits < ships[ship].shipSize) {
+    if (ships[ship].hits == ships[ship].shipSize - 1) {
+      ships[ship].hits++;
+      ships[ship].sunk = true;
+      ships.shipsSunk++;
+      return ships;
+    }
+    else {
+      ships[ship].hits++;
+      return ships;
+    }
+  }
+  return ships;
+}
+
+function markShipSunk()
+{
+
+}
+
+function markGridHit(row, col, grid)
 {
   grid[col][row] = '<td class="hit"><b>HIT</b></td>';
   return grid;
 }
 
-function markMiss(row, col, grid)
+function markGridMiss(row, col, grid)
 {
   grid[col][row] = '<td class="miss"><b>MISS</b></td>';
   return grid;
-}
-
-function markSunk()
-{
-
 }
