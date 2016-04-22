@@ -65,7 +65,7 @@ function main()
   function playerAttack()
   {
     document.getElementById('debug').innerHTML = '';
-    if (game.computerShips.shipsSunk !== 5) {
+    if (game.computerShips.shipsSunk !== 5 || game.playerShips.shipsSunk !== 5) {
       var cells = document.getElementsByTagName('td');
       for (var i = 0; i < cells.length; i++) {
         cells[i].onclick = function() {
@@ -116,7 +116,7 @@ function main()
   function computerAttack()
   {
     document.getElementById('debug').innerHTML = 'It is now your turn. Make a guess by clicking in the Computer Grid';
-    if (game.playerShips.shipsSunk !== 5) {
+    if (game.playerShips.shipsSunk !== 5 || game.computerShips.shipsSunk !== 5) {
       var point = generatePoint();
       var row = point[0];
       var col = point[1];
