@@ -45,10 +45,16 @@ function main()
   var startGameButton = document.getElementById('start-game');
   startGameButton.onclick = function() {
     if (game.playerShips.placedCount == 5) {
-      computerAttack();
-      startGameButton.innerHTML = 'End Turn';
-      playerAttack();
-      document.getElementById('debug').innerHTML = 'It is now your turn. Make a guess and then click "End Turn"';
+      if (game.computerShips.shipsSunk === 5 || game.playerShips.shipsSunk === 5) {
+        startGameButton.innerHTML = 'Start Game';
+        main();
+      }
+      else {
+        computerAttack();
+        startGameButton.style.visibility = 'hidden';
+        playerAttack();
+        document.getElementById('debug').innerHTML = 'It is now your turn. Make a guess by clicking in the Computer Grid';
+      }
     }
     else {
       document.getElementById('debug').innerHTML = 'You must place all your ships before you can play.';
@@ -58,43 +64,182 @@ function main()
   // Controller functions
   function playerAttack()
   {
-    var cells = document.getElementsByTagName('td');
-    for (var i = 0; i < cells.length; i++) {
-      cells[i].onclick = function() {
-        document.getElementById('debug').innerHTML = '';
-        var message = document.getElementById('message');
-        var newMessage = '<br>';
-        var col = this.cellIndex;
-        var row = this.parentNode.rowIndex;
-        var cell = computerGrid.rows[row].cells[col];
-        if (cell.className === 'hidden-ship') {
-          newMessage = String.fromCharCode(65 + (col - 1))  + ' ' + row + ' was a ' + 'hit!';
-          game.computerShips = markShipHit(cell.id, game.computerShips);
-          game.computerGrid = markGridHit(row - 1, col - 1, game.computerGrid);
-          computerGrid.innerHTML = displayGrid(game.computerGrid);
-          if (game.computerShips[cell.id].sunk === true) {
-            if (game.computerShips.shipsSunk === 5) {
-              newMessage = 'You win!!';
-            }
-            else {
-              newMessage = cell.id + ' was sunk!';
-            }
-          }
-        }
-        else {
-          if (cell.className !== 'hit') {
-            newMessage = String.fromCharCode(65 + (col - 1))  + ' ' + row + ' was a ' + 'miss!';
-            game.computerGrid = markGridMiss(row - 1, col - 1, game.computerGrid);
+    document.getElementById('debug').innerHTML = '';
+    if (game.computerShips.shipsSunk !== 5) {
+      var cells = document.getElementsByTagName('td');
+      for (var i = 0; i < cells.length; i++) {
+        cells[i].onclick = function() {
+          document.getElementById('debug').innerHTML = '';
+          var message = document.getElementById('message');
+          var newMessage = '<br>';
+          var col = this.cellIndex;
+          var row = this.parentNode.rowIndex;
+          var cell = computerGrid.rows[row].cells[col];
+          if (cell.className === 'hidden-ship') {
+            newMessage = String.fromCharCode(65 + (col - 1))  + ' ' + row + ' was a ' + 'hit!';
+            game.computerShips = markShipHit(cell.id, game.computerShips);
+            game.computerGrid = markGridHit(row - 1, col - 1, game.computerGrid);
             computerGrid.innerHTML = displayGrid(game.computerGrid);
+            if (game.computerShips[cell.id].sunk === true) {
+              if (game.computerShips.shipsSunk === 5) {
+                newMessage = 'You win!!';
+                document.getElementById('start-game').style.visibility = 'visible';
+                document.getElementById('start-game').innerHTML = 'New Game';
+                playerAttack();
+              }
+              else {
+                newMessage = cell.id + ' was sunk!';
+              }
+            }
           }
+          else {
+            if (cell.className !== 'hit') {
+              newMessage = String.fromCharCode(65 + (col - 1))  + ' ' + row + ' was a ' + 'miss!';
+              game.computerGrid = markGridMiss(row - 1, col - 1, game.computerGrid);
+              computerGrid.innerHTML = displayGrid(game.computerGrid);
+            }
+          }
+          message.innerHTML = newMessage;
+
+          setTimeout(computerAttack, 1000);
+          playerAttack();
         }
-        message.innerHTML = newMessage;
       }
+    }
+    else {
+      newMessage = 'You win!!';
+      document.getElementById('start-game').style.visibility = 'visible';
+      document.getElementById('start-game').innerHTML = 'New Game';
     }
   }
 
   function computerAttack()
   {
+    document.getElementById('debug').innerHTML = 'It is now your turn. Make a guess by clicking in the Computer Grid';
+    if (game.playerShips.shipsSunk !== 5) {
+      var point = generatePoint();
+      var row = point[0];
+      var col = point[1];
+      var samePoint = false;
+      if (comparePoints(game.computerGuesses, point)) {
+        samePoint = true;
+        do {
+          point = generatePoint();
+          if (comparePoints(game.computerGuesses, point)) {
+            point = generatePoint();
+          }
+          else {
+            samePoint = false;
+          }
+        }
+        while (samePoint);
+      }
+      row = point[0];
+      col = point[1];
+      game.computerGuesses.push(point);
+      var cell = playerGrid.rows[row].cells[col];
+      var message = document.getElementById('message');
+      var newMessage = '<br>';
+      if (cell.className === 'ship') {
+        newMessage = 'The computer hit ' + cell.id;
+        game.playerShips = markShipHit(cell.id, game.playerShips);
+        game.grid = markGridHit(row - 1, col - 1, game.grid);
+        playerGrid.innerHTML = displayGrid(game.grid);
+        if (game.playerShips[cell.id].sunk === true) {
+          if (game.playerShips.shipsSunk == 5) {
+            document.getElementById('start-game').style.visibility = 'visible';
+            document.getElementById('start-game').innerHTML = 'New Game';
+            newMessage = 'The computer wins...';
+          }
+          else {
+            newMessage = cell.id + ' was sunk!';
+          }
+        }
+        // Make the next guess adjacent or close to the previous guess if it's a hit
+        var origRow = row;
+        row++;
+        if (row > 9) {
+          row--;
+        }
+        cell = playerGrid.rows[row].cells[col];
+        if (cell.className === 'ship') {
+          game.computerRow = row;
+          game.computerCol = col;
+        }
+        else {
+          row--;
+          if (row < 0) {
+            row++;
+          }
+          cell = playerGrid.rows[row].cells[col];
+          if (cell.className === 'ship') {
+            game.computerRow = row;
+            game.computerCol = col;
+          }
+          else {
+            row--;
+            if (row < 0) {
+              row = row + 1;
+            }
+            cell = playerGrid.rows[row].cells[col];
+            if (cell.className === 'ship') {
+              game.computerRow = row;
+              game.computerCol = col;
+            }
+            else {
+              row = origRow;
+              col++;
+              if (col > 9) {
+                col = col - 1;
+              }
+              cell = playerGrid.rows[row].cells[col];
+              if (cell.className === 'ship') {
+                game.computerRow = row;
+                game.computerCol = col;
+              }
+              else {
+                col = col - 1;
+                if (col < 0) {
+                  col = col + 1;
+                }
+                cell = playerGrid.rows[row].cells[col];
+                if (cell.className === 'ship') {
+                  game.computerRow = row;
+                  game.computerCol = col;
+                }
+                else {
+                  col--;
+                  if (col < 0) {
+                    col = col + 1;
+                  }
+                  cell = playerGrid.rows[row].cells[col];
+                  if (cell.className === 'ship') {
+                    game.computerRow = row;
+                    game.computerCol = col;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      else {
+        if (cell.className !== 'hit') {
+          newMessage = 'The computer missed!';
+          game.grid = markGridMiss(row - 1, col - 1, game.grid);
+          playerGrid.innerHTML = displayGrid(game.grid);
+        }
+      }
+      message.innerHTML = newMessage;
+    }
+    else {
+      document.getElementById('start-game').style.visibility = 'visible';
+      document.getElementById('message').innerHTML = 'The computer wins...';
+      document.getElementById('start-game').innerHTML = 'New Game';
+    }
+  }
+
+  function generatePoint() {
     var row = Math.floor((Math.random() * 10) + 1);
     var col = Math.floor((Math.random() * 10) + 1);
     if (game.computerRow > -1) {
@@ -105,58 +250,8 @@ function main()
       col = game.computerCol;
       game.computerCol = -1;
     }
-    var cell = playerGrid.rows[row].cells[col];
-    var message = document.getElementById('message');
-    var newMessage = '<br>';
-    if (cell.className === 'ship') {
-      newMessage = 'The computer hit ' + cell.id;
-      game.playerShips = markShipHit(cell.id, game.playerShips);
-      game.grid = markGridHit(row - 1, col - 1, game.grid);
-      playerGrid.innerHTML = displayGrid(game.grid);
-      if (game.playerShips[cell.id].sunk === true) {
-        if (game.playerShips.shipsSunk == 5) {
-          newMessage = 'The computer wins...';
-        }
-        else {
-          newMessage = cell.id + ' was sunk!';
-        }
-      }
-      // Make the next guess adjacent or close to the previous guess if it's a hit
-      var rand = Math.floor((Math.random() * 2) + 0);
-      if (rand == 1) {
-        row++;
-        if (row > 9) {
-          row = row - 2;
-        }
-        else if (row < 0) {
-          row = row + 2;
-        }
-        game.computerRow = row;
-        game.computerCol = col;
-      }
-      else {
-        col++;
-        if (col > 9) {
-          col = col - 2;
-        }
-        else if (col < 0) {
-          col = col + 2;
-        }
-        game.computerCol = col;
-        game.computerRow = row;
-      }
-    }
-    else {
-      if (cell.className === 'miss' || cell.className === 'hit') {
-        computerAttack(game.grid);
-      }
-      if (cell.className !== 'hit') {
-        newMessage = 'The computer missed!';
-        game.grid = markGridMiss(row - 1, col - 1, game.grid);
-        playerGrid.innerHTML = displayGrid(game.grid);
-      }
-    }
-    message.innerHTML = newMessage;
+    var point = [row, col];
+    return point;
   }
 
   function loadJSON(filename)
@@ -278,6 +373,18 @@ function main()
   {
     var message = document.getElementById('debug').innerHTML = 'Your save game data was successfully cleared!';
     localStorage.removeItem('save-game');
-    init();
+    main();
+  }
+
+  function comparePoints(computerGuesses, point) {
+    if (computerGuesses.length == 0) {
+      return false;
+    }
+    for (var i = 0; i < computerGuesses.length; i++) {
+      if (computerGuesses[i][0] === point[0] && computerGuesses[i][1] === point[1]) {
+        return true;
+      }
+    }
+    return false;
   }
 }

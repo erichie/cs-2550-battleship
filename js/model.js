@@ -11,6 +11,7 @@ function Game(grid, computerGrid, playerShips, computerShips)
   this.computerGrid = computerGrid;
   this.playerShips = playerShips;
   this.computerShips = computerShips;
+  this.computerGuesses = new Array();
   this.computerRow = -1;
   this.computerCol = -1;
 }
@@ -23,7 +24,7 @@ function PlayerShips()
   this.playerCruiser;
   this.playerSub;
   this.playerDestroyer;
-  this.shipSunks = 0;
+  this.shipsSunk = 0;
 }
 
 function ComputerShips()
